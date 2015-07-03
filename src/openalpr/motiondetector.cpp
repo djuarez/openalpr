@@ -7,7 +7,7 @@ namespace alpr
   
 MotionDetector::MotionDetector()
 {
-	pMOG2 = new BackgroundSubtractorMOG2();
+	pMOG2 = createBackgroundSubtractorMOG2();
 }
 
 MotionDetector::~MotionDetector()
@@ -17,7 +17,8 @@ MotionDetector::~MotionDetector()
 
 void MotionDetector::ResetMotionDetection(cv::Mat* frame)
 {
-	pMOG2->operator()(*frame, fgMaskMOG2, 1);
+
+	pMOG2->apply(*frame, fgMaskMOG2, 1);
 }
 
 cv::Rect MotionDetector::MotionDetect(cv::Mat* frame)
@@ -30,7 +31,8 @@ cv::Rect MotionDetector::MotionDetect(cv::Mat* frame)
 	cv::Rect largest_rect, rect_temp;
 
 	// Detect motion
-	pMOG2->operator()(*frame, fgMaskMOG2, -1);
+	pMOG2->apply(*frame, fgMaskMOG2, -1);
+
 	//Remove noise
 	cv::erode(fgMaskMOG2, fgMaskMOG2, getStructuringElement(cv::MORPH_RECT, cv::Size(6, 6)));
 	// Find the contours of motion areas in the image

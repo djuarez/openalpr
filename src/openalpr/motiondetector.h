@@ -4,6 +4,7 @@
 
 #include "opencv2/opencv.hpp"
 #include "utility.h"
+#include "opencv2/video/background_segm.hpp"
 
 namespace alpr
 {
