@@ -78,15 +78,19 @@ namespace alpr
 
   AlprFullDetails AlprImpl::recognizeFullDetails(cv::Mat img, std::vector<cv::Rect> regionsOfInterest)
   {
+
+    std::cerr << "Hasta los 0 image" << std::endl;
+
+
     timespec startTime;
     getTimeMonotonic(&startTime);
-
 
     AlprFullDetails response;
 
     response.results.epoch_time = getEpochTimeMs();
     response.results.img_width = img.cols;
     response.results.img_height = img.rows;
+
 
     for (unsigned int i = 0; i < regionsOfInterest.size(); i++)
     {
@@ -104,16 +108,20 @@ namespace alpr
     }
 
     // Convert image to grayscale if required
+    std::cerr << "Hasta los 0 image" << std::endl;
+
     Mat grayImg = img;
     if (img.channels() > 2)
       cvtColor( img, grayImg, CV_BGR2GRAY );
-    
+    std::cerr << "Hasta los 1 image" << std::endl;
+
     // Prewarp the image and ROIs if configured]
     std::vector<cv::Rect> warpedRegionsOfInterest = regionsOfInterest;
     // Warp the image if prewarp is provided
     grayImg = prewarp->warpImage(grayImg);
     warpedRegionsOfInterest = prewarp->projectRects(regionsOfInterest, grayImg.cols, grayImg.rows, false);
-    
+
+
     vector<PlateRegion> warpedPlateRegions;
     // Find all the candidate regions
     if (config->skipDetection == false)
@@ -131,6 +139,7 @@ namespace alpr
         warpedPlateRegions.push_back(pr);
       }
     }
+    std::cerr << "Hasta los 2 image" << std::endl;
 
     queue<PlateRegion> plateQueue;
     for (unsigned int i = 0; i < warpedPlateRegions.size(); i++)
@@ -141,6 +150,7 @@ namespace alpr
     {
       PlateRegion plateRegion = plateQueue.front();
       plateQueue.pop();
+      std::cerr << "Hasta los  image " << platecount << std::endl;
 
       PipelineData pipeline_data(img, grayImg, plateRegion.rect, config);
 
@@ -263,6 +273,7 @@ namespace alpr
     
     timespec endTime;
     getTimeMonotonic(&endTime);
+
     response.results.total_processing_time_ms = diffclock(startTime, endTime);
 
     if (config->debugTiming)
@@ -292,7 +303,7 @@ namespace alpr
           Point p2(coords[(z + 1) % 4].x, coords[(z + 1) % 4].y);
           line(img, p1, p2, Scalar(255,0,255), 2);
         }
-        
+
         // Draw the individual character boxes
         for (int q = 0; q < response.results.plates[i].bestPlate.character_details.size(); q++)
         {
@@ -303,7 +314,6 @@ namespace alpr
           line(img, Point(details.corners[3].x, details.corners[3].y), Point(details.corners[0].x, details.corners[0].y), Scalar(0,255,0), 1);
         }
       }
-
 
       displayImage(config, "Main Image", img);
 
@@ -328,7 +338,6 @@ namespace alpr
   AlprResults AlprImpl::recognize( std::vector<char> imageBytes)
   {
     cv::Mat img = cv::imdecode(cv::Mat(imageBytes), 1);
-
     return this->recognize(img);
   }
 
@@ -353,6 +362,7 @@ namespace alpr
   {
     std::vector<cv::Rect> regionsOfInterest;
     regionsOfInterest.push_back(cv::Rect(0, 0, img.cols, img.rows));
+
 
     return this->recognize(img, regionsOfInterest);
   }
@@ -588,7 +598,9 @@ namespace alpr
     points.push_back(Point2f(char_rect.x + char_rect.width, char_rect.y));
     points.push_back(Point2f(char_rect.x + char_rect.width, char_rect.y + char_rect.height));
     points.push_back(Point2f(char_rect.x, char_rect.y + char_rect.height));
-    
+
+    std::cout<< "hasta los huevos"<< std::endl;
+
     Mat img = pipeline_data->colorImg;
     Mat debugImg(img.size(), img.type());
     img.copyTo(debugImg);

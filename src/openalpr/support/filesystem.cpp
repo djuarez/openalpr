@@ -150,7 +150,7 @@ namespace alpr
 #if defined(__APPLE__)
       double milliseconds = (stat_buf.st_ctimespec.tv_sec * 1000) +  (((double) stat_buf.st_ctimespec.tv_nsec) / 1000000.0);
 #else
-      double milliseconds = (stat_buf.st_ctim.tv_sec * 1000) +  (((double) stat_buf.st_ctim.tv_nsec) / 1000000.0);
+      double milliseconds = (stat_buf.st_ctime * 1000) +  (((double) stat_buf.st_ctime_nsec) / 1000000.0);
 #endif
 
       return (int64_t) milliseconds;

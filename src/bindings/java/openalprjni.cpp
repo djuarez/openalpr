@@ -81,7 +81,6 @@ JNIEXPORT jstring JNICALL Java_com_openalpr_jni_Alpr_native_1recognize___3B
     env->GetByteArrayRegion (jimageBytes, 0, len, reinterpret_cast<jbyte*>(buf));
 
     std::vector<char> cvec(buf, buf+len);
-
     AlprResults results = nativeAlpr->recognize(cvec);
     std::string json = Alpr::toJson(results);
 

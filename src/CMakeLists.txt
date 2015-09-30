@@ -16,10 +16,10 @@ add_definitions( -DOPENALPR_PATCH_VERSION=${OPENALPR_PATCH_VERSION})
 SET(CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake_modules/")
 
 # TODO: switch to http://www.cmake.org/cmake/help/v2.8.5/cmake.html#module:GNUInstallDirs ?
-IF (NOT CMAKE_INSTALL_SYSCONFDIR) 
+IF (NOT CMAKE_INSTALL_SYSCONFDIR)
   SET(CMAKE_INSTALL_SYSCONFDIR "/etc")
 ENDIF()
-IF (NOT CMAKE_INSTALL_VARDIR) 
+IF (NOT CMAKE_INSTALL_VARDIR)
   SET(CMAKE_INSTALL_VARDIR "${CMAKE_INSTALL_PREFIX}/var")
 ENDIF()
 
@@ -27,7 +27,7 @@ IF ( NOT DEFINED WITH_DAEMON )
   SET(WITH_DAEMON ON)
 ENDIF()
 
-IF (WIN32 AND WITH_DAEMON) 
+IF (WIN32 AND WITH_DAEMON)
   MESSAGE(WARNING "Skipping alprd daemon installation, as it is not supported in Windows.")
   SET(WITH_DAEMON OFF)
 ENDIF()
@@ -36,16 +36,11 @@ FIND_PACKAGE( Tesseract REQUIRED )
 
 include_directories(${Tesseract_INCLUDE_DIRS})
 
-# Discover OpenCV directory automatically
-find_path(OpenCV_DIR
-  NAMES OpenCVConfig.cmake
-  HINTS ${CMAKE_SOURCE_DIR}/../libraries/opencv/)
-		
+
+SET(OpenCV_DIR /Users/djuarez/openCV-3.0.0/build)
 # Opencv Package
 FIND_PACKAGE( OpenCV REQUIRED )
-IF (${OpenCV_VERSION} VERSION_LESS 2.4.7)
-	MESSAGE(FATAL_ERROR "OpenCV version is not compatible : ${OpenCV_VERSION}")
-ENDIF()
+
 
 
 include_directories(./openalpr )
@@ -94,11 +89,11 @@ IF (WITH_DAEMON)
 	  ${Tesseract_LIBRARIES}
       ${Extra_LIBS}
     )
-	
+
 	# Don't include misc utilities for Windows
 	add_subdirectory(misc_utilities)
 ENDIF()
-  
+
 add_subdirectory(tests)
 
 add_subdirectory(openalpr)

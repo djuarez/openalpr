@@ -24,6 +24,7 @@
 #include <vector>
 #include <fstream> 
 #include <stdint.h>
+#include <opencv2/core/mat.hpp>
 
 namespace alpr
 {
@@ -134,7 +135,10 @@ namespace alpr
       // Recognize from byte data representing an encoded image (e.g., BMP, PNG, JPG, GIF etc).
       AlprResults recognize(std::vector<char> imageBytes);
 
-      // Recognize from raw pixel data.  
+      AlprResults recognizeMe(cv::Mat image);
+
+
+    // Recognize from raw pixel data.
       AlprResults recognize(unsigned char* pixelData, int bytesPerPixel, int imgWidth, int imgHeight, std::vector<AlprRegionOfInterest> regionsOfInterest);
 
 
